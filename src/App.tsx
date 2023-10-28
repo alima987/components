@@ -1,50 +1,67 @@
-/*
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent, useCallback } from 'react';
 import './App.css';
 
-class ErrorBoundary extends React.Component {
-  constructor(props) {
+interface Starship {
+  name: string;
+  model: string;
+  manufacturer: string;
+}
+
+interface ErrorBoundaryProps {
+  children: React.ReactNode;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+}
+
+class ErrorBoundary extends React.Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
   }
 
-  componentDidCatch(error, errorInfo) {
-    console.error('Error caught by error boundary:', error, errorInfo);
+  componentDidCatch() {
     this.setState({ hasError: true });
   }
 
   render() {
-    if (this.state.hasError) {
+    const { children } = this.props;
+    const { hasError } = this.state;
+    if (hasError) {
       return <div>Something went wrong. Please try again later.</div>;
     }
-    return this.props.children;
+    return children;
   }
 }
 
 function App() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchResults, setSearchResults] = useState<Starship[]>([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        let url = 'https://swapi.dev/api/starships/';
-        if (searchTerm) {
-          url += `?search=${searchTerm.trim()}`;
-        }
-        const response = await fetch(url);
-        const data = await response.json();
-        setSearchResults(data.results);
-      } catch (error) {
-        console.error('Error fetching data', error);
+  const fetchData = useCallback(async () => {
+    try {
+      let url = 'https://swapi.dev/api/starships/';
+      if (searchTerm) {
+        url += `?search=${searchTerm.trim()}`;
       }
-    };
-
-    fetchData();
-    localStorage.setItem('searchTerm', searchTerm);
+      const response = await fetch(url);
+      const data = await response.json();
+      setSearchResults(data.results);
+    } catch (error) {
+      // Handle the error here, such as logging it or displaying a user-friendly message
+    }
   }, [searchTerm]);
 
-  const handleSearchChange = (event) => {
+  useEffect(() => {
+    fetchData();
+    localStorage.setItem('searchTerm', searchTerm);
+  }, [fetchData, searchTerm]);
+
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     const term = event.target.value.trim();
     setSearchTerm(term);
   };
@@ -67,22 +84,25 @@ function App() {
             onChange={handleSearchChange}
             placeholder="Starships"
           />
-          <button onClick={handleSearch}>Search</button>
+          <button type="button" onClick={handleSearch}>
+            Search
+          </button>
         </div>
         <div className="bottom-section">
-          {searchResults.map((result, index) => (
-            <div key={index}>
+          {searchResults.map((result) => (
+            <div key={result.name}>
               <h2>{result.name}</h2>
               <p>{result.model}</p>
               <p>{result.manufacturer}</p>
             </div>
           ))}
         </div>
-        <button onClick={throwError}>Throw Error</button>
+        <button type="button" onClick={throwError}>
+          Throw Error
+        </button>
       </div>
     </ErrorBoundary>
   );
 }
 
-export default App
-*/
+export default App;
