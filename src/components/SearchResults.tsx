@@ -17,8 +17,8 @@ const SearchResults: React.FC<SearchResultsProps> = ({ searchResults }) => {
         {searchResults.map((result) => (
           <div key={result.name}>
             <h2>{result.name}</h2>
-            <p>{result.model}</p>
-            <p>{result.manufacturer}</p>
+            <p>Model: {result.model}</p>
+            <p>Manufacturer: {result.manufacturer}</p>
           </div>
         ))}
       </div>

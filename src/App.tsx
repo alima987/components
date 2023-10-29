@@ -1,5 +1,7 @@
 import React, { useState, useEffect, ChangeEvent, useCallback } from 'react';
 import './App.css';
+import Search from './components/Search';
+import SearchResults from './components/SearchResults';
 
 interface Starship {
   name: string;
@@ -13,6 +15,7 @@ interface ErrorBoundaryProps {
 
 interface ErrorBoundaryState {
   hasError: boolean;
+  errorMessage: string;
 }
 
 class ErrorBoundary extends React.Component<
@@ -21,25 +24,27 @@ class ErrorBoundary extends React.Component<
 > {
   constructor(props: ErrorBoundaryProps) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false, errorMessage: '' };
   }
 
-  componentDidCatch() {
-    this.setState({ hasError: true });
+  componentDidCatch(error: Error) {
+    this.setState({ hasError: true, errorMessage: error.message });
   }
 
   render() {
     const { children } = this.props;
-    const { hasError } = this.state;
+    const { hasError, errorMessage } = this.state;
     if (hasError) {
-      return <div>Something went wrong. Please try again later.</div>;
+      return <p>{errorMessage}</p>;
     }
     return children;
   }
 }
 
 function App() {
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>(
+    localStorage.getItem('searchTerm') || ''
+  );
   const [searchResults, setSearchResults] = useState<Starship[]>([]);
 
   const fetchData = useCallback(async () => {
@@ -52,7 +57,7 @@ function App() {
       const data = await response.json();
       setSearchResults(data.results);
     } catch (error) {
-      // Handle the error here, such as logging it or displaying a user-friendly message
+      throw new Error('Something went wrong. Please try again later.');
     }
   }, [searchTerm]);
 
@@ -77,28 +82,14 @@ function App() {
   return (
     <ErrorBoundary>
       <div className="App">
-        <div className="top-section">
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={handleSearchChange}
-            placeholder="Starships"
-          />
-          <button type="button" onClick={handleSearch}>
-            Search
-          </button>
-        </div>
-        <div className="bottom-section">
-          {searchResults.map((result) => (
-            <div key={result.name}>
-              <h2>{result.name}</h2>
-              <p>{result.model}</p>
-              <p>{result.manufacturer}</p>
-            </div>
-          ))}
-        </div>
+        <Search
+          handleSearch={handleSearch}
+          searchTerm={searchTerm}
+          handleSearchChange={handleSearchChange}
+        />
+        <SearchResults searchResults={searchResults} />
         <button type="button" onClick={throwError}>
-          Throw Error
+          Error
         </button>
       </div>
     </ErrorBoundary>

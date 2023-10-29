@@ -18,7 +18,7 @@ const Search: React.FC<SearchProps> = ({
           type="text"
           value={searchTerm}
           onChange={handleSearchChange}
-          placeholder="Search..."
+          placeholder="Starships"
         />
         <button type="button" onClick={handleSearch}>
           Search
