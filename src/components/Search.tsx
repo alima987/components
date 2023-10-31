@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import { Component, ChangeEvent } from 'react';
 
 interface SearchProps {
   handleSearch: () => void;
@@ -6,28 +6,22 @@ interface SearchProps {
   handleSearchChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Search: React.FC<SearchProps> = ({
-  handleSearch,
-  searchTerm,
-  handleSearchChange,
-}) => {
-  const render = () => {
+class Search extends Component<SearchProps> {
+  render() {
     return (
       <div className="search">
         <input
           type="text"
-          value={searchTerm}
-          onChange={handleSearchChange}
+          value={this.props.searchTerm}
+          onChange={this.props.handleSearchChange}
           placeholder="Starships"
         />
-        <button type="button" onClick={handleSearch}>
-          Search
+        <button type="button" onClick={this.props.handleSearch}>
+          Search ships!
         </button>
       </div>
     );
-  };
-
-  return render();
-};
+  }
+}
 
 export default Search;

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 
 interface Starship {
   name: string;
@@ -8,13 +8,29 @@ interface Starship {
 
 interface SearchResultsProps {
   searchResults: Starship[];
+  isLoading: boolean;
 }
 
-const SearchResults: React.FC<SearchResultsProps> = ({ searchResults }) => {
-  const render = () => {
+class SearchResults extends Component<
+  SearchResultsProps,
+  { isLoading: boolean }
+> {
+  constructor(props: SearchResultsProps) {
+    super(props);
+    this.state = {
+      isLoading: false,
+    };
+  }
+
+  renderLoader() {
+    return <div className="loader">Loading...</div>;
+  }
+
+  renderResults() {
     return (
       <div className="bottom-section">
-        {searchResults.map((result) => (
+        {this.props.isLoading ? this.renderLoader() : null}
+        {this.props.searchResults.map((result) => (
           <div key={result.name}>
             <h2>{result.name}</h2>
             <p>Model: {result.model}</p>
@@ -23,8 +39,11 @@ const SearchResults: React.FC<SearchResultsProps> = ({ searchResults }) => {
         ))}
       </div>
     );
-  };
-  return render();
-};
+  }
+
+  render() {
+    return <div>{this.renderResults()}</div>;
+  }
+}
 
 export default SearchResults;
