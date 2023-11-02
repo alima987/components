@@ -1,88 +1,75 @@
-import { Component, ChangeEvent } from 'react';
+import { useState, useEffect, useCallback, ChangeEvent } from 'react';
 import './App.css';
 import Search from './components/Search';
 import SearchResults from './components/SearchResults';
 
-class App extends Component {
-  state = {
-    searchTerm: localStorage.getItem('searchTerm') || '',
-    searchResults: [],
-    hasError: false,
-    errorMessage: '',
-    isLoading: false,
-  };
+const App = () => {
+  const [searchTerm, setSearchTerm] = useState(
+    localStorage.getItem('searchTerm') || ''
+  );
+  const [searchResults, setSearchResults] = useState([]);
+  const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
-      this.setState({ isLoading: true });
+      setIsLoading(true);
 
       let url = 'https://swapi.dev/api/starships/';
-      if (this.state.searchTerm) {
-        url += `?search=${this.state.searchTerm.trim()}`;
+      if (searchTerm) {
+        url += `?search=${searchTerm.trim()}`;
       }
       const response = await fetch(url);
       const data = await response.json();
-      this.setState({
-        searchResults: data.results,
-        isLoading: false,
-      });
+      setSearchResults(data.results);
+      setIsLoading(false);
       localStorage.setItem('searchResults', JSON.stringify(data.results));
     } catch (error) {
-      this.setState({
-        hasError: true,
-        errorMessage: 'Something went wrong. Please try again later.',
-        isLoading: false,
-      });
+      setHasError(true);
+      setErrorMessage('Something went wrong. Please try again later.');
+      setIsLoading(false);
     }
-  };
+  }, [searchTerm]);
 
-  handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     const term = event.target.value.trim();
-    this.setState({ searchTerm: term });
+    setSearchTerm(term);
   };
 
-  handleSearch = () => {
-    this.setState({ isLoading: true });
-    this.fetchData();
+  const handleSearch = () => {
+    setIsLoading(true);
+    fetchData();
   };
 
-  throwError = () => {
+  const throwError = () => {
     throw new Error('Test error thrown by the button click');
   };
 
-  componentDidMount() {
-    this.fetchData();
-    localStorage.setItem('searchTerm', this.state.searchTerm);
-  }
+  useEffect(() => {
+    fetchData();
+    localStorage.setItem('searchTerm', searchTerm);
+  }, [searchTerm, fetchData]);
 
-  render() {
-    return (
-      <div className="App">
-        {this.state.hasError ? (
-          <p>{this.state.errorMessage}</p>
-        ) : (
-          <>
-            <Search
-              handleSearch={this.handleSearch}
-              searchTerm={this.state.searchTerm}
-              handleSearchChange={this.handleSearchChange}
-            />
-            <button
-              type="button"
-              onClick={this.throwError}
-              className="error-button"
-            >
-              Error
-            </button>
-            <SearchResults
-              searchResults={this.state.searchResults}
-              isLoading={this.state.isLoading}
-            />
-          </>
-        )}
-      </div>
-    );
-  }
-}
+  return (
+    <div className="App">
+      {hasError ? (
+        <p>{errorMessage}</p>
+      ) : (
+        <>
+          <Search
+            handleSearch={handleSearch}
+            searchTerm={searchTerm}
+            handleSearchChange={handleSearchChange}
+          />
+          <button type="button" onClick={throwError} className="error-button">
+            Error
+          </button>
+          <SearchResults searchResults={searchResults} isLoading={isLoading} />
+        </>
+      )}
+    </div>
+  );
+};
 
 export default App;
