@@ -1,16 +1,26 @@
 import { useState, useEffect, useCallback, ChangeEvent } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './App.css';
 import Search from './components/Search';
 import SearchResults from './components/SearchResults';
+import Pagination from './components/pagination';
 
 const App = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const queryParams = new URLSearchParams(location.search);
+  const page = parseInt(queryParams.get('page') || '1');
+
   const [searchTerm, setSearchTerm] = useState(
     localStorage.getItem('searchTerm') || ''
   );
   const [searchResults, setSearchResults] = useState([]);
+  const [displayResults, setDisplayResults] = useState([]);
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(page);
 
   const fetchData = useCallback(async () => {
     try {
@@ -24,13 +34,16 @@ const App = () => {
       const data = await response.json();
       setSearchResults(data.results);
       setIsLoading(false);
+      setDisplayResults(
+        data.results.slice((currentPage - 1) * 10, currentPage * 10)
+      );
       localStorage.setItem('searchResults', JSON.stringify(data.results));
     } catch (error) {
       setHasError(true);
       setErrorMessage('Something went wrong. Please try again later.');
       setIsLoading(false);
     }
-  }, [searchTerm]);
+  }, [searchTerm, currentPage]);
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     const term = event.target.value.trim();
@@ -42,6 +55,11 @@ const App = () => {
     fetchData();
   };
 
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    navigate(`/search?page=${pageNumber}`);
+  };
+
   const throwError = () => {
     throw new Error('Test error thrown by the button click');
   };
@@ -49,7 +67,7 @@ const App = () => {
   useEffect(() => {
     fetchData();
     localStorage.setItem('searchTerm', searchTerm);
-  }, [searchTerm, fetchData]);
+  }, [searchTerm, fetchData, currentPage]);
 
   return (
     <div className="App">
@@ -65,7 +83,12 @@ const App = () => {
           <button type="button" onClick={throwError} className="error-button">
             Error
           </button>
-          <SearchResults searchResults={searchResults} isLoading={isLoading} />
+          <SearchResults searchResults={displayResults} isLoading={isLoading} />
+          <Pagination
+            currentPage={currentPage}
+            totalCount={searchResults.length}
+            onPageChange={handlePageChange}
+          />
         </>
       )}
     </div>
