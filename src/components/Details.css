@@ -1,0 +1,22 @@
+.app-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .content-container {
+    display: flex;
+    width: 100%;
+  }
+  
+  .search-results-container {
+    width: 50%;
+    padding: 0 10px;
+  }
+  
+  .details-container {
+    width: 50%;
+    padding: 0 10px;
+  }
+  

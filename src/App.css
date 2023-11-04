@@ -23,3 +23,27 @@ button {
   border-radius: 10px;
   margin-bottom: 15px;
 }
+/* Update the CSS for the pagination component to display it horizontally */
+.pagination {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+
+.pagination li {
+  margin: 0 5px;
+}
+
+.pagination button {
+  padding: 5px 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background-color: #333;
+}

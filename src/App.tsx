@@ -5,6 +5,12 @@ import Search from './components/Search';
 import SearchResults from './components/SearchResults';
 import Pagination from './components/pagination';
 
+interface Starship {
+  name: string;
+  model: string;
+  manufacturer: string;
+}
+
 const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -15,14 +21,16 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState(
     localStorage.getItem('searchTerm') || ''
   );
-  const [searchResults, setSearchResults] = useState([]);
-  const [displayResults, setDisplayResults] = useState([]);
+  //const [searchResults, setSearchResults] = useState([]);
+  //const [displayResults, setDisplayResults] = useState([]);
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(page);
+  const [searchResults, setSearchResults] = useState<Starship[]>([]);
+  const [displayResults, setDisplayResults] = useState<Starship[]>([]);
 
-  const fetchData = useCallback(async () => {
+  /*const fetchData = useCallback(async () => {
     try {
       setIsLoading(true);
 
@@ -38,6 +46,37 @@ const App = () => {
         data.results.slice((currentPage - 1) * 10, currentPage * 10)
       );
       localStorage.setItem('searchResults', JSON.stringify(data.results));
+    } catch (error) {
+      setHasError(true);
+      setErrorMessage('Something went wrong. Please try again later.');
+      setIsLoading(false);
+    }
+  }, [searchTerm, currentPage]);*/
+  const fetchData = useCallback(async () => {
+    try {
+      setIsLoading(true);
+
+      let url = 'https://swapi.dev/api/starships/';
+      if (searchTerm) {
+        url += `?search=${searchTerm.trim()}`;
+      }
+      const response = await fetch(url);
+      await response.json();
+
+      const allResults: Starship[] = [];
+      for (let i = 1; i <= 4; i++) {
+        const pageUrl = `https://swapi.dev/api/starships/?page=${i}`;
+        const pageResponse = await fetch(pageUrl);
+        const pageData = await pageResponse.json();
+        allResults.push(...pageData.results);
+      }
+
+      setSearchResults(allResults);
+      setIsLoading(false);
+      setDisplayResults(
+        allResults.slice((currentPage - 1) * 10, currentPage * 10)
+      );
+      localStorage.setItem('searchResults', JSON.stringify(allResults));
     } catch (error) {
       setHasError(true);
       setErrorMessage('Something went wrong. Please try again later.');
