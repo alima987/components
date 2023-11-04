@@ -23,7 +23,7 @@ button {
   border-radius: 10px;
   margin-bottom: 15px;
 }
-/* Update the CSS for the pagination component to display it horizontally */
+
 .pagination {
   list-style: none;
   display: flex;

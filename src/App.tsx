@@ -21,8 +21,7 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState(
     localStorage.getItem('searchTerm') || ''
   );
-  //const [searchResults, setSearchResults] = useState([]);
-  //const [displayResults, setDisplayResults] = useState([]);
+
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -30,59 +29,45 @@ const App = () => {
   const [searchResults, setSearchResults] = useState<Starship[]>([]);
   const [displayResults, setDisplayResults] = useState<Starship[]>([]);
 
-  /*const fetchData = useCallback(async () => {
-    try {
-      setIsLoading(true);
+  const fetchDataWithPageSize = useCallback(
+    async (pageSize: number) => {
+      try {
+        setIsLoading(true);
 
-      let url = 'https://swapi.dev/api/starships/';
-      if (searchTerm) {
-        url += `?search=${searchTerm.trim()}`;
+        let url = 'https://swapi.dev/api/starships/';
+        if (searchTerm) {
+          url += `?search=${searchTerm.trim()}`;
+        }
+        const response = await fetch(url);
+        await response.json();
+
+        const allResults = [];
+        for (let i = 1; i <= 4; i++) {
+          const pageUrl = `https://swapi.dev/api/starships/?page=${i}`;
+          const pageResponse = await fetch(pageUrl);
+          const pageData = await pageResponse.json();
+          allResults.push(...pageData.results);
+        }
+
+        setSearchResults(allResults);
+        setIsLoading(false);
+
+        const startIndex = (currentPage - 1) * pageSize;
+        const endIndex = Math.min(startIndex + pageSize, allResults.length);
+        setDisplayResults(allResults.slice(startIndex, endIndex));
+
+        localStorage.setItem('searchResults', JSON.stringify(allResults));
+      } catch (error) {
+        setHasError(true);
+        setErrorMessage('Something went wrong. Please try again later.');
+        setIsLoading(false);
       }
-      const response = await fetch(url);
-      const data = await response.json();
-      setSearchResults(data.results);
-      setIsLoading(false);
-      setDisplayResults(
-        data.results.slice((currentPage - 1) * 10, currentPage * 10)
-      );
-      localStorage.setItem('searchResults', JSON.stringify(data.results));
-    } catch (error) {
-      setHasError(true);
-      setErrorMessage('Something went wrong. Please try again later.');
-      setIsLoading(false);
-    }
-  }, [searchTerm, currentPage]);*/
-  const fetchData = useCallback(async () => {
-    try {
-      setIsLoading(true);
-
-      let url = 'https://swapi.dev/api/starships/';
-      if (searchTerm) {
-        url += `?search=${searchTerm.trim()}`;
-      }
-      const response = await fetch(url);
-      await response.json();
-
-      const allResults: Starship[] = [];
-      for (let i = 1; i <= 4; i++) {
-        const pageUrl = `https://swapi.dev/api/starships/?page=${i}`;
-        const pageResponse = await fetch(pageUrl);
-        const pageData = await pageResponse.json();
-        allResults.push(...pageData.results);
-      }
-
-      setSearchResults(allResults);
-      setIsLoading(false);
-      setDisplayResults(
-        allResults.slice((currentPage - 1) * 10, currentPage * 10)
-      );
-      localStorage.setItem('searchResults', JSON.stringify(allResults));
-    } catch (error) {
-      setHasError(true);
-      setErrorMessage('Something went wrong. Please try again later.');
-      setIsLoading(false);
-    }
-  }, [searchTerm, currentPage]);
+    },
+    [searchTerm, currentPage]
+  );
+  const fetchData = useCallback(() => {
+    fetchDataWithPageSize(5);
+  }, [fetchDataWithPageSize]);
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     const term = event.target.value.trim();
@@ -97,6 +82,11 @@ const App = () => {
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
     navigate(`/search?page=${pageNumber}`);
+  };
+
+  const handlePageSizeChange = (pageSize: number) => {
+    setCurrentPage(1);
+    fetchDataWithPageSize(pageSize);
   };
 
   const throwError = () => {
@@ -127,6 +117,7 @@ const App = () => {
             currentPage={currentPage}
             totalCount={searchResults.length}
             onPageChange={handlePageChange}
+            onPageSizeChange={handlePageSizeChange}
           />
         </>
       )}
