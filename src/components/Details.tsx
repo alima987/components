@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './Details.css';
 
 interface StarshipDetails {
@@ -10,6 +10,7 @@ interface StarshipDetails {
 
 const Details = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [detailsData, setDetailsData] = useState<StarshipDetails | null>(null);
 
   const fetchDetailsData = async (page: string) => {
@@ -38,17 +39,26 @@ const Details = () => {
     }
   }, [location]);
 
+  const handleCloseModal = () => {
+    navigate('/search');
+  };
+
   return (
-    <div className="details-section">
-      {detailsData ? (
-        <>
-          <h2>{detailsData.name}</h2>
-          <p>Model: {detailsData.model}</p>
-          <p>Manufacturer: {detailsData.manufacturer}</p>
-        </>
-      ) : (
-        <p>Loading details...</p>
-      )}
+    <div className="modal">
+      <div className="modal-content">
+        {detailsData ? (
+          <>
+            <span className="close" onClick={handleCloseModal}>
+              &times;
+            </span>
+            <h2>{detailsData.name}</h2>
+            <p>Model: {detailsData.model}</p>
+            <p>Manufacturer: {detailsData.manufacturer}</p>
+          </>
+        ) : (
+          <p>Loading details...</p>
+        )}
+      </div>
     </div>
   );
 };

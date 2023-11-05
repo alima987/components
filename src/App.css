@@ -47,3 +47,10 @@ button {
 .pagination button.active {
   background-color: #333;
 }
+
+ul {
+  display: flex;
+}
+::marker {
+  color: transparent;
+}
