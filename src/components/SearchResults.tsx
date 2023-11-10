@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-
+import { useCustomState } from './Context';
 export interface Starship {
   name: string;
   model: string;
@@ -13,6 +13,7 @@ interface SearchResultsProps {
 }
 
 const SearchResults: React.FC<SearchResultsProps> = (props) => {
+  useCustomState();
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState<Starship | null>(null);
 

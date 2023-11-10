@@ -63,7 +63,7 @@ const App = () => {
         setIsLoading(false);
       }
     },
-    [searchTerm, currentPage]
+    [searchTerm, currentPage, setSearchResults]
   );
   const fetchData = useCallback(() => {
     fetchDataWithPageSize(5);
