@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1699721587261" clover="3.2.0">
-  <project timestamp="1699721587262" name="All files">
-    <metrics statements="84" coveredstatements="81" conditionals="13" coveredconditionals="11" methods="23" coveredmethods="21" elements="120" coveredelements="113" complexity="0" loc="84" ncloc="84" packages="1" files="6" classes="6"/>
+<coverage generated="1699722429670" clover="3.2.0">
+  <project timestamp="1699722429671" name="All files">
+    <metrics statements="88" coveredstatements="85" conditionals="13" coveredconditionals="11" methods="24" coveredmethods="22" elements="125" coveredelements="118" complexity="0" loc="88" ncloc="88" packages="1" files="7" classes="7"/>
+    <file name="404 page.tsx" path="C:\Users\alima\Desktop\Components\components\src\components\404 page.tsx">
+      <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="3" count="1" type="stmt"/>
+      <line num="4" count="2" type="stmt"/>
+      <line num="12" count="1" type="stmt"/>
+    </file>
     <file name="Card.tsx" path="C:\Users\alima\Desktop\Components\components\src\components\Card.tsx">
       <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
       <line num="1" count="2" type="stmt"/>
