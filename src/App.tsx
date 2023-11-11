@@ -1,8 +1,9 @@
+import React from 'react';
 import { useState, useEffect, useCallback, ChangeEvent } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './App.css';
 import Search from './components/Search';
-import SearchResults from './components/SearchResults';
+import SearchResults from './components/CardList';
 import Pagination from './components/pagination';
 
 interface Starship {

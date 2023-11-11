@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
-import { Starship } from './SearchResults';
+import { Starship } from './CardList';
 
 interface CustomStateContextProps {
   searchTerm: string;

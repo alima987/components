@@ -55,7 +55,6 @@ describe('Search component', () => {
 
     fireEvent.change(searchInput, { target: { value: 'test' } });
 
-    // Log the events to help identify the issue
     console.log('handleSearchChange calls:', handleSearchChange.mock.calls);
     console.log('handleSearch calls:', handleSearch.mock.calls);
 
@@ -79,7 +78,6 @@ describe('Button Click', () => {
       />
     );
 
-    // Ensure the localStorage.setItem is called in the next event loop cycle
     setTimeout(() => {
       expect(localStorage.setItem).toHaveBeenCalledWith('searchTerm', 'test');
     }, 0);
@@ -89,7 +87,7 @@ describe('Button Click', () => {
 describe('LocalStorage Interaction', () => {
   it('fetches the value from local storage on mount', () => {
     (useCustomState as jest.Mock).mockReturnValue({
-      searchTerm: '', // Ensure initial searchTerm is empty
+      searchTerm: '',
       setSearchTerm: jest.fn(),
     });
 
@@ -103,7 +101,6 @@ describe('LocalStorage Interaction', () => {
       />
     );
 
-    // Ensure the localStorage.getItem is called in the next event loop cycle
     setTimeout(() => {
       expect(localStorage.getItem).toHaveBeenCalledWith('searchTerm');
     }, 0);
