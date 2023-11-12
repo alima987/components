@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import Pagination from '../components/pagination';
+import Pagination from '../components/Pagination';
 
 describe('Pagination Component', () => {
   test('renders page numbers and page size dropdown', () => {

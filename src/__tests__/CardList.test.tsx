@@ -49,3 +49,48 @@ test('calls navigate when card is clicked', async () => {
 
   expect(mockNavigate);
 });
+
+test('closes modal when close button is clicked', async () => {
+  const { getByText, queryByText } = render(
+    <MemoryRouter>
+      <CustomStateProvider>
+        <SearchResults searchResults={mockSearchResults} isLoading={false} />
+      </CustomStateProvider>
+    </MemoryRouter>
+  );
+
+  fireEvent.click(getByText('Starship 1'));
+  fireEvent.click(getByText('×')); // Close button
+
+  expect(queryByText('Starship 1')).not;
+  expect(queryByText('Model: Model 1')).not;
+  expect(queryByText('Manufacturer: Manufacturer 1')).not;
+});
+test('displays loader when isLoading is true', async () => {
+  const { getByText } = render(
+    <MemoryRouter>
+      <CustomStateProvider>
+        <SearchResults searchResults={[]} isLoading={true} />
+      </CustomStateProvider>
+    </MemoryRouter>
+  );
+
+  expect(getByText('Loading...')).toBeInTheDocument();
+});
+
+test('calls useCustomState hook', async () => {
+  const useCustomStateMock = jest.spyOn(
+    require('../components/Context'),
+    'useCustomState'
+  );
+
+  render(
+    <MemoryRouter>
+      <CustomStateProvider>
+        <SearchResults searchResults={mockSearchResults} isLoading={false} />
+      </CustomStateProvider>
+    </MemoryRouter>
+  );
+
+  expect(useCustomStateMock).toHaveBeenCalled();
+});

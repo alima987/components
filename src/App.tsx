@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import './App.css';
 import Search from './components/Search';
 import SearchResults from './components/CardList';
-import Pagination from './components/pagination';
+import Pagination from './components/Pagination';
 
 interface Starship {
   name: string;

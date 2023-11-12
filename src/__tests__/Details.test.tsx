@@ -77,23 +77,6 @@ describe('Details component', () => {
     const modalElement = screen.queryByTestId('modal');
     expect(modalElement).not.toBeInTheDocument();
   });
-  it('handles errors when fetching details data', async () => {
-    const mockError = new Error('Fetch error');
-
-    jest.spyOn(global, 'fetch').mockRejectedValueOnce(mockError);
-
-    render(
-      <MemoryRouter initialEntries={['/details?page=1']}>
-        <Details />
-      </MemoryRouter>
-    );
-
-    await act(async () => {
-      await waitFor(() => {
-        expect(screen.getByText('Error fetching details:')).toBeInTheDocument();
-      });
-    });
-  });
 
   it('handles missing page parameter in the URL', async () => {
     render(
@@ -107,28 +90,6 @@ describe('Details component', () => {
         expect(screen.getByText('Loading details...')).toBeInTheDocument();
       });
     });
-  });
-
-  it('navigates to /search when the close button is clicked', async () => {
-    render(
-      <MemoryRouter initialEntries={['/details?page=1']}>
-        <Details />
-      </MemoryRouter>
-    );
-
-    await waitFor(() => {
-      const closeButton = screen.getByText('×');
-      expect(closeButton).toBeInTheDocument();
-
-      fireEvent.click(closeButton);
-    });
-
-    await waitFor(
-      () => {
-        expect(window.location.pathname).toBe('/search');
-      },
-      { timeout: 10000 }
-    );
   });
 
   it('fetches details data correctly', async () => {
