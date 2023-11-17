@@ -14,24 +14,8 @@ interface SearchProps {
 const Search = (props: SearchProps) => {
   const dispatch = useDispatch();
   const { searchTerm } = useSelector((state: RootState) => state.starships);
-  const { /*searchTerm,*/ setSearchTerm } = useCustomState();
+  const { setSearchTerm } = useCustomState();
 
-  /*return (
-    <div className="search">
-      <input
-        type="text"
-        value={searchTerm}
-        onChange={(e) => {
-          setSearchTerm(e.target.value);
-          props.handleSearchChange(e);
-        }}
-        placeholder="Starships"
-      />
-      <button type="button" onClick={props.handleSearch}>
-        Search ships!
-      </button>
-    </div>
-  );*/
   return (
     <div className="search">
       <input
@@ -40,7 +24,7 @@ const Search = (props: SearchProps) => {
         onChange={(e) => {
           setSearchTerm(e.target.value);
           const term = e.target.value.trim();
-          dispatch(saveSearchTerm(term)); // Dispatch the action to save the search term
+          dispatch(saveSearchTerm(term));
           props.handleSearchChange(e);
         }}
         placeholder="Starships"
