@@ -5,8 +5,9 @@ import './App.css';
 import Search from './components/Search';
 import SearchResults from './components/CardList';
 import Pagination from './components/Pagination';
-import { useDispatch } from 'react-redux';
-import { saveSearchTerm } from './reducers/starships';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveSearchTerm, saveItemsPerPage } from './reducers/starships';
+import { RootState } from './reducers/rootReducer';
 
 export interface Starship {
   name: string;
@@ -22,9 +23,7 @@ const App = () => {
   const queryParams = new URLSearchParams(location.search);
   const page = parseInt(queryParams.get('page') || '1');
 
-  const [searchTerm, setSearchTerm] = useState(
-    localStorage.getItem('searchTerm') || ''
-  );
+  const { searchTerm } = useSelector((state: RootState) => state.starships);
 
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -61,13 +60,18 @@ const App = () => {
         setDisplayResults(allResults.slice(startIndex, endIndex));
 
         localStorage.setItem('searchResults', JSON.stringify(allResults));
+        dispatch(saveItemsPerPage(pageSize));
       } catch (error) {
         setHasError(true);
         setErrorMessage('Something went wrong. Please try again later.');
         setIsLoading(false);
       }
     },
-    [searchTerm, currentPage, setSearchResults]
+    /*[searchTerm, currentPage, setSearchResults]*/ [
+      searchTerm,
+      currentPage,
+      dispatch,
+    ]
   );
   const fetchData = useCallback(() => {
     fetchDataWithPageSize(5);
@@ -79,7 +83,7 @@ const App = () => {
   };*/
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     const term = event.target.value.trim();
-    setSearchTerm(term);
+    //setSearchTerm(term);
     dispatch(saveSearchTerm(term)); // Dispatch the action to save the search term
   };
 
@@ -93,9 +97,14 @@ const App = () => {
     navigate(`/search?page=${pageNumber}`);
   };
 
+  /*const handlePageSizeChange = (pageSize: number) => {
+    setCurrentPage(1);
+    fetchDataWithPageSize(pageSize);
+  };*/
   const handlePageSizeChange = (pageSize: number) => {
     setCurrentPage(1);
     fetchDataWithPageSize(pageSize);
+    dispatch(saveItemsPerPage(pageSize)); // Dispatch the action to save items per page
   };
 
   const throwError = () => {

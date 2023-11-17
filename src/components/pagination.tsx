@@ -1,4 +1,7 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveItemsPerPage } from '../reducers/starships';
+import { RootState } from '../reducers/rootReducer';
 
 interface PaginationProps {
   currentPage: number;
@@ -13,18 +16,27 @@ const Pagination: React.FC<PaginationProps> = ({
   onPageChange,
   onPageSizeChange,
 }) => {
-  const pageNumbers = [];
+  const dispatch = useDispatch();
+  const itemsPerPage = useSelector(
+    (state: RootState) => state.starships.itemsPerPage
+  );
   const pageSizes = [5, 10, 15];
 
-  for (let i = 1; i <= Math.ceil(totalCount / 10); i++) {
-    pageNumbers.push(i);
-  }
+  const handlePageSizeChange = (pageSize: number) => {
+    onPageSizeChange(pageSize);
+    dispatch(saveItemsPerPage(pageSize));
+  };
+
+  const pageNumbers = Array.from(
+    { length: Math.ceil(totalCount / itemsPerPage) },
+    (_, index) => index + 1
+  );
 
   return (
     <div className="pagination">
       <div>
         Page Size:
-        <select onChange={(e) => onPageSizeChange(Number(e.target.value))}>
+        <select onChange={(e) => handlePageSizeChange(Number(e.target.value))}>
           {pageSizes.map((size) => (
             <option key={size} value={size}>
               {size}
