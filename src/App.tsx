@@ -5,14 +5,17 @@ import './App.css';
 import Search from './components/Search';
 import SearchResults from './components/CardList';
 import Pagination from './components/Pagination';
+import { useDispatch } from 'react-redux';
+import { saveSearchTerm } from './reducers/starships';
 
-interface Starship {
+export interface Starship {
   name: string;
   model: string;
   manufacturer: string;
 }
 
 const App = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -70,9 +73,14 @@ const App = () => {
     fetchDataWithPageSize(5);
   }, [fetchDataWithPageSize]);
 
+  /*const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const term = event.target.value.trim();
+    setSearchTerm(term);
+  };*/
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     const term = event.target.value.trim();
     setSearchTerm(term);
+    dispatch(saveSearchTerm(term)); // Dispatch the action to save the search term
   };
 
   const handleSearch = () => {
