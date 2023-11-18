@@ -1,52 +1,3 @@
-/*import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Starship } from '../App';
-
-interface StarshipsState {
-  data: Starship[];
-  isLoading: boolean;
-  error: string | null;
-  searchTerm: string;
-}
-
-const initialState: StarshipsState = {
-  data: [],
-  isLoading: false,
-  error: null,
-  searchTerm: '',
-};
-
-export const starshipsSlice = createSlice({
-  name: 'starships',
-  initialState,
-  reducers: {
-    fetchStarshipsStart: (state) => {
-      state.isLoading = true;
-      state.error = null;
-    },
-    fetchStarshipsSuccess: (state, action: PayloadAction<Starship[]>) => {
-      state.data = action.payload;
-      state.isLoading = false;
-    },
-    fetchStarshipsFailure: (state, action: PayloadAction<string>) => {
-      state.error = action.payload;
-      state.isLoading = false;
-    },
-    saveSearchTerm: (state, action: PayloadAction<string>) => {
-      state.searchTerm = action.payload;
-    },
-  },
-});
-
-export const {
-  fetchStarshipsStart,
-  fetchStarshipsSuccess,
-  fetchStarshipsFailure,
-  saveSearchTerm,
-} = starshipsSlice.actions;
-
-export default starshipsSlice.reducer;
-*/
-// reducers/starships.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Starship } from '../App';
 
@@ -56,6 +7,8 @@ interface StarshipsState {
   error: string | null;
   searchTerm: string;
   itemsPerPage: number;
+  appLoading: boolean;
+  detailsLoading: boolean;
 }
 
 const initialState: StarshipsState = {
@@ -63,7 +16,9 @@ const initialState: StarshipsState = {
   isLoading: false,
   error: null,
   searchTerm: '',
-  itemsPerPage: 5, // Set a default value for items per page
+  itemsPerPage: 5,
+  appLoading: false,
+  detailsLoading: false,
 };
 
 export const starshipsSlice = createSlice({
@@ -88,6 +43,12 @@ export const starshipsSlice = createSlice({
     saveItemsPerPage: (state, action: PayloadAction<number>) => {
       state.itemsPerPage = action.payload;
     },
+    setAppLoading: (state, action: PayloadAction<boolean>) => {
+      state.appLoading = action.payload;
+    },
+    setDetailsLoading: (state, action: PayloadAction<boolean>) => {
+      state.detailsLoading = action.payload;
+    },
   },
 });
 
@@ -97,6 +58,8 @@ export const {
   fetchStarshipsFailure,
   saveSearchTerm,
   saveItemsPerPage,
+  setAppLoading,
+  setDetailsLoading,
 } = starshipsSlice.actions;
 
 export default starshipsSlice.reducer;

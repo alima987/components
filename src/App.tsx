@@ -8,6 +8,7 @@ import Pagination from './components/Pagination';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveSearchTerm, saveItemsPerPage } from './reducers/starships';
 import { RootState } from './reducers/rootReducer';
+import { setAppLoading } from './reducers/starships';
 
 export interface Starship {
   name: string;
@@ -35,6 +36,7 @@ const App = () => {
   const fetchDataWithPageSize = useCallback(
     async (pageSize: number) => {
       try {
+        dispatch(setAppLoading(true));
         setIsLoading(true);
 
         let url = 'https://swapi.dev/api/starships/';
@@ -54,6 +56,7 @@ const App = () => {
 
         setSearchResults(allResults);
         setIsLoading(false);
+        dispatch(setAppLoading(false));
 
         const startIndex = (currentPage - 1) * pageSize;
         const endIndex = Math.min(startIndex + pageSize, allResults.length);
@@ -62,29 +65,21 @@ const App = () => {
         localStorage.setItem('searchResults', JSON.stringify(allResults));
         dispatch(saveItemsPerPage(pageSize));
       } catch (error) {
+        dispatch(setAppLoading(false));
         setHasError(true);
         setErrorMessage('Something went wrong. Please try again later.');
         setIsLoading(false);
       }
     },
-    /*[searchTerm, currentPage, setSearchResults]*/ [
-      searchTerm,
-      currentPage,
-      dispatch,
-    ]
+    [searchTerm, currentPage, dispatch]
   );
   const fetchData = useCallback(() => {
     fetchDataWithPageSize(5);
   }, [fetchDataWithPageSize]);
 
-  /*const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const term = event.target.value.trim();
-    setSearchTerm(term);
-  };*/
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     const term = event.target.value.trim();
-    //setSearchTerm(term);
-    dispatch(saveSearchTerm(term)); // Dispatch the action to save the search term
+    dispatch(saveSearchTerm(term));
   };
 
   const handleSearch = () => {
@@ -97,14 +92,10 @@ const App = () => {
     navigate(`/search?page=${pageNumber}`);
   };
 
-  /*const handlePageSizeChange = (pageSize: number) => {
-    setCurrentPage(1);
-    fetchDataWithPageSize(pageSize);
-  };*/
   const handlePageSizeChange = (pageSize: number) => {
     setCurrentPage(1);
     fetchDataWithPageSize(pageSize);
-    dispatch(saveItemsPerPage(pageSize)); // Dispatch the action to save items per page
+    dispatch(saveItemsPerPage(pageSize));
   };
 
   const throwError = () => {
@@ -112,9 +103,10 @@ const App = () => {
   };
 
   useEffect(() => {
+    dispatch(setAppLoading(true));
     fetchData();
     localStorage.setItem('searchTerm', searchTerm);
-  }, [searchTerm, fetchData, currentPage]);
+  }, [searchTerm, fetchData, currentPage, dispatch]);
 
   return (
     <div className="App">

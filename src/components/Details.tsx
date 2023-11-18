@@ -2,6 +2,8 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './Details.css';
+import { useDispatch } from 'react-redux';
+import { setDetailsLoading } from '../reducers/starships';
 
 interface StarshipDetails {
   name: string;
@@ -10,35 +12,42 @@ interface StarshipDetails {
 }
 
 const Details = () => {
+  const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const [detailsData, setDetailsData] = useState<StarshipDetails | null>(null);
-
-  const fetchDetailsData = async (page: string) => {
-    try {
-      const response = await fetch(
-        `https://swapi.dev/api/starships/?page=${page}`
-      );
-      const data = await response.json();
-      return data.results[0] as StarshipDetails;
-    } catch (error) {
-      console.error('Error fetching details:', error);
-      return null;
-    }
-  };
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const page = searchParams.get('page');
 
     if (page) {
+      dispatch(setDetailsLoading(true));
+
+      const fetchDetailsData = async (page: string) => {
+        try {
+          dispatch(setDetailsLoading(true));
+          const response = await fetch(
+            `https://swapi.dev/api/starships/?page=${page}`
+          );
+          const data = await response.json();
+          dispatch(setDetailsLoading(false));
+          return data.results[0] as StarshipDetails;
+        } catch (error) {
+          dispatch(setDetailsLoading(false));
+          console.error('Error fetching details:', error);
+          return null;
+        }
+      };
+
       fetchDetailsData(page).then((data) => {
         if (data) {
           setDetailsData(data);
         }
+        dispatch(setDetailsLoading(false));
       });
     }
-  }, [location]);
+  }, [location, dispatch]);
 
   const handleCloseModal = () => {
     navigate('/search');
