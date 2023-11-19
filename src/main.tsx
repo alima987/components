@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import Router from './components/Routes';
 import { CustomStateProvider } from './components/Context';
 import { Provider } from 'react-redux';
-import store from './store';
+import store from './query/store';
 
 const rootElement = document.getElementById('root');
 if (rootElement) {
