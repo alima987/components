@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import { Starship } from '../pages/App';
+import { Starship } from '../pages';
 
 export const api = createApi({
   reducerPath: 'api',
@@ -13,3 +13,14 @@ export const api = createApi({
 });
 
 export const { useGetStarshipsQuery } = api;
+
+export type FetchDataResult = Promise<Starship[]>;
+
+export const fetchData = async (page: number, searchTerm?: string): FetchDataResult => {
+  const url = `https://swapi.dev/api/starships/?page=${page}${
+    searchTerm ? `&search=${searchTerm}` : ''
+  }`;
+  const response = await fetch(url);
+  const data = await response.json();
+  return data.results;
+};

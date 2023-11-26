@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { Starship } from '../pages/App';
+import { Starship } from '../pages';
 
 interface StarshipsState {
   data: Starship[];

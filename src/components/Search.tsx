@@ -12,7 +12,7 @@ interface SearchProps {
   searchTerm: string;
 }
 
-const Search = (props: SearchProps) => {
+const Search: React.FC<SearchProps> = (props) => {
   const dispatch = useDispatch();
   const { searchTerm } = useSelector((state: RootState) => state.starships);
   const { setSearchTerm } = useCustomState();
