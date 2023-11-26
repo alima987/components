@@ -1,4 +1,5 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { ReactNode, createContext, useContext, useState } from 'react';
+
 import { Starship } from './CardList';
 
 interface CustomStateContextProps {
@@ -8,9 +9,7 @@ interface CustomStateContextProps {
   setSearchResults: React.Dispatch<React.SetStateAction<Starship[]>>;
 }
 
-const CustomStateContext = createContext<CustomStateContextProps | undefined>(
-  undefined
-);
+const CustomStateContext = createContext<CustomStateContextProps | undefined>(undefined);
 
 export const useCustomState = () => {
   const context = useContext(CustomStateContext);

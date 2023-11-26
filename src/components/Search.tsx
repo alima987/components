@@ -1,9 +1,10 @@
 import React from 'react';
 import { ChangeEvent } from 'react';
-import { useCustomState } from './Context';
 import { useDispatch, useSelector } from 'react-redux';
-import { saveSearchTerm } from '../reducers/starships';
+
 import { RootState } from '../reducers/rootReducer';
+import { saveSearchTerm } from '../reducers/starships';
+import { useCustomState } from './Context';
 
 interface SearchProps {
   handleSearch: () => void;

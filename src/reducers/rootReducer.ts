@@ -1,4 +1,5 @@
 import { combineReducers } from '@reduxjs/toolkit';
+
 import starshipsReducer from './starships';
 
 const rootReducer = combineReducers({

@@ -1,9 +1,10 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import './Details.css';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
+
 import { setDetailsLoading } from '../reducers/starships';
+import './Details.css';
 
 interface StarshipDetails {
   name: string;
@@ -27,9 +28,7 @@ const Details = () => {
       const fetchDetailsData = async (page: string) => {
         try {
           dispatch(setDetailsLoading(true));
-          const response = await fetch(
-            `https://swapi.dev/api/starships/?page=${page}`
-          );
+          const response = await fetch(`https://swapi.dev/api/starships/?page=${page}`);
           const data = await response.json();
           dispatch(setDetailsLoading(false));
           return data.results[0] as StarshipDetails;

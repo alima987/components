@@ -1,7 +1,9 @@
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
-import { useCustomState } from './Context';
+import { Outlet } from 'react-router-dom';
+
 import Card from './Card';
+import { useCustomState } from './Context';
 
 export interface Starship {
   name: string;
@@ -15,7 +17,7 @@ interface SearchResultsProps {
 
 const SearchResults: React.FC<SearchResultsProps> = (props) => {
   useCustomState();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [selectedItem, setSelectedItem] = useState<Starship | null>(null);
 
   const renderLoader = () => {
@@ -24,7 +26,7 @@ const SearchResults: React.FC<SearchResultsProps> = (props) => {
 
   const handleItemClick = (item: Starship) => {
     setSelectedItem(item);
-    navigate(`/?frontpage=2&details=${item.name}`);
+    router.push(`/?frontpage=2&details=${item.name}`);
   };
 
   const renderResults = () => {

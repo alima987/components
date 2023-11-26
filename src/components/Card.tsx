@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Starship } from './CardList';
 
 interface CardProps {
@@ -8,11 +9,7 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ item, onItemClick }) => {
   return (
-    <div
-      key={item.name}
-      onClick={() => onItemClick(item)}
-      className="result-item"
-    >
+    <div key={item.name} onClick={() => onItemClick(item)} className="result-item">
       <h2>{item.name}</h2>
       <p>Model: {item.model}</p>
       <p>Manufacturer: {item.manufacturer}</p>

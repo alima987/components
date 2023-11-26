@@ -1,7 +1,8 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { saveItemsPerPage } from '../reducers/starships';
+
 import { RootState } from '../reducers/rootReducer';
+import { saveItemsPerPage } from '../reducers/starships';
 
 interface PaginationProps {
   currentPage: number;
@@ -17,9 +18,7 @@ const Pagination: React.FC<PaginationProps> = ({
   onPageSizeChange,
 }) => {
   const dispatch = useDispatch();
-  const itemsPerPage = useSelector(
-    (state: RootState) => state.starships.itemsPerPage
-  );
+  const itemsPerPage = useSelector((state: RootState) => state.starships.itemsPerPage);
   const pageSizes = [5, 10, 15];
 
   const handlePageSizeChange = (pageSize: number) => {
