@@ -27,9 +27,7 @@ export const App = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const queryParams = new URLSearchParams(router.asPath.split(/\?/)[1] || '');
-
   const page = parseInt(queryParams.get('page') || '1');
-
   const { searchTerm } = useSelector((state: RootState) => state.starships);
 
   const [hasError, setHasError] = useState(false);
@@ -49,26 +47,19 @@ export const App = () => {
         if (searchTerm) {
           url += `?search=${searchTerm.trim()}`;
         }
+
         const response = await fetch(url);
-        await response.json();
+        const data = await response.json();
 
-        const allResults = [];
-        for (let i = 1; i <= 4; i++) {
-          const pageUrl = `https://swapi.dev/api/starships/?page=${i}`;
-          const pageResponse = await fetch(pageUrl);
-          const pageData = await pageResponse.json();
-          allResults.push(...pageData.results);
-        }
-
-        setSearchResults(allResults);
+        setSearchResults(data.results);
         setIsLoading(false);
         dispatch(setAppLoading(false));
 
         const startIndex = (currentPage - 1) * pageSize;
-        const endIndex = Math.min(startIndex + pageSize, allResults.length);
-        setDisplayResults(allResults.slice(startIndex, endIndex));
+        const endIndex = Math.min(startIndex + pageSize, data.results.length);
+        setDisplayResults(data.results.slice(startIndex, endIndex));
 
-        localStorage.setItem('searchResults', JSON.stringify(allResults));
+        localStorage.setItem('searchResults', JSON.stringify(data.results));
         dispatch(saveItemsPerPage(pageSize));
       } catch (error) {
         dispatch(setAppLoading(false));
@@ -79,6 +70,7 @@ export const App = () => {
     },
     [searchTerm, currentPage, dispatch]
   );
+
   const fetchData = useCallback(() => {
     fetchDataWithPageSize(5);
   }, [fetchDataWithPageSize]);
@@ -97,6 +89,7 @@ export const App = () => {
     setCurrentPage(pageNumber);
     router.push(`/search?page=${pageNumber}`);
   };
+
   const handlePageSizeChange = (pageSize: number) => {
     setCurrentPage(1);
     fetchDataWithPageSize(pageSize);
@@ -151,5 +144,4 @@ export const getServerSideProps: GetServerSideProps<IndexProps> = async (context
     },
   };
 };
-
 export default App;
