@@ -5,6 +5,7 @@ import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchData } from 'src/query/api';
 
+import { NotFoundPage } from '../components/404 page';
 import SearchResults from '../components/CardList';
 import Pagination from '../components/Pagination';
 import Search from '../components/Search';
@@ -31,7 +32,6 @@ export const App = () => {
   const { searchTerm } = useSelector((state: RootState) => state.starships);
 
   const [hasError, setHasError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(page);
   const [searchResults, setSearchResults] = useState<Starship[]>([]);
@@ -51,7 +51,15 @@ export const App = () => {
         const response = await fetch(url);
         const data = await response.json();
 
-        setSearchResults(data.results);
+        const allResults = [];
+        for (let i = 1; i <= 4; i++) {
+          const pageUrl = `https://swapi.dev/api/starships/?page=${i}`;
+          const pageResponse = await fetch(pageUrl);
+          const pageData = await pageResponse.json();
+          allResults.push(...pageData.results);
+        }
+
+        setSearchResults(allResults);
         setIsLoading(false);
         dispatch(setAppLoading(false));
 
@@ -64,7 +72,6 @@ export const App = () => {
       } catch (error) {
         dispatch(setAppLoading(false));
         setHasError(true);
-        setErrorMessage('Something went wrong. Please try again later.');
         setIsLoading(false);
       }
     },
@@ -97,19 +104,22 @@ export const App = () => {
   };
 
   const throwError = () => {
+    setHasError(true);
     throw new Error('Test error thrown by the button click');
   };
 
   useEffect(() => {
     dispatch(setAppLoading(true));
-    fetchData();
-    localStorage.setItem('searchTerm', searchTerm);
-  }, [searchTerm, fetchData, currentPage, dispatch]);
+    if (!hasError) {
+      fetchData();
+      localStorage.setItem('searchTerm', searchTerm);
+    }
+  }, [searchTerm, fetchData, currentPage, dispatch, hasError]);
 
   return (
     <div className="App">
       {hasError ? (
-        <p>{errorMessage}</p>
+        <NotFoundPage />
       ) : (
         <>
           <Search

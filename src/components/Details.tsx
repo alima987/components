@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { setDetailsLoading } from '../reducers/starships';
-import './Details.css';
 
 interface StarshipDetails {
   name: string;
