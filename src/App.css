@@ -1,3 +1,11 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background-color: #dae6ec;
+}
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -22,4 +30,10 @@ button {
  border: 1px solid;
  border-radius: 10px;
  margin-bottom: 15px;
+}
+h2 {
+  color: white;
+}
+p {
+  color: white
 }

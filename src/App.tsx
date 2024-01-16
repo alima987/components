@@ -1,7 +1,7 @@
-import { Component, ChangeEvent } from 'react';
 import './App.css';
-import Search from './components/Search';
-import SearchResults from './components/SearchResults';
+import Search from './components/Search/Search';
+import SearchResults from './components/SearchResults/SearchResults';
+import { Component, ChangeEvent } from 'react';
 
 class App extends Component {
   state = {
@@ -16,7 +16,7 @@ class App extends Component {
     try {
       this.setState({ isLoading: true });
 
-      let url = 'https://swapi.dev/api/starships/';
+      let url = 'https://rickandmortyapi.com/api/character';
       if (this.state.searchTerm) {
         url += `?search=${this.state.searchTerm.trim()}`;
       }
