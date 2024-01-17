@@ -2,11 +2,12 @@ import './SearchResults.scss';
 import { Component } from 'react';
 
 interface Characters {
+  id: number;
   name: string;
   species: string;
   gender: string;
   location: {
-    name: 'Earth';
+    name: string;
   };
   image: string;
 }
@@ -36,7 +37,7 @@ class SearchResults extends Component<
       <div className="bottom-section">
         {this.props.isLoading ? this.renderLoader() : null}
         {this.props.searchResults.map((result) => (
-          <div key={result.name} className="card">
+          <div key={result.id} className="card">
             <div className="img_card">
               <img src={result.image} className="card_img" />
             </div>

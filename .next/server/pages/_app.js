@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 /*
  * ATTENTION: An "eval-source-map" devtool has been used.
  * This devtool is neither made for production nor for readable output files.
@@ -8,29 +8,29 @@
  * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
  */
 (() => {
-var exports = {};
-exports.id = "pages/_app";
-exports.ids = ["pages/_app"];
-exports.modules = {
-
-/***/ "react":
-/*!************************!*\
+  var exports = {};
+  exports.id = 'pages/_app';
+  exports.ids = ['pages/_app'];
+  exports.modules = {
+    /***/ react:
+      /*!************************!*\
   !*** external "react" ***!
   \************************/
-/***/ ((module) => {
+      /***/ (module) => {
+        module.exports = require('react');
 
-module.exports = require("react");
-
-/***/ })
-
-};
-;
-
-// load runtime
-var __webpack_require__ = require("../webpack-runtime.js");
-__webpack_require__.C(exports);
-var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, ["vendor-chunks/next","vendor-chunks/@swc"], () => (__webpack_exec__("./node_modules/next/dist/pages/_app.js")));
-module.exports = __webpack_exports__;
-
+        /***/
+      },
+  };
+  // load runtime
+  var __webpack_require__ = require('../webpack-runtime.js');
+  __webpack_require__.C(exports);
+  var __webpack_exec__ = (moduleId) =>
+    __webpack_require__((__webpack_require__.s = moduleId));
+  var __webpack_exports__ = __webpack_require__.X(
+    0,
+    ['vendor-chunks/next', 'vendor-chunks/@swc'],
+    () => __webpack_exec__('./node_modules/next/dist/pages/_app.js')
+  );
+  module.exports = __webpack_exports__;
 })();
