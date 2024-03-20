@@ -11,14 +11,13 @@ class App extends Component {
     errorMessage: '',
     isLoading: false,
   };
-
   fetchData = async () => {
     try {
       this.setState({ isLoading: true });
 
       let url = 'https://rickandmortyapi.com/api/character';
       if (this.state.searchTerm) {
-        url += `?search=${this.state.searchTerm.trim()}`;
+        url += `?name=${this.state.searchTerm.trim()}`;
       }
       const response = await fetch(url);
       const data = await response.json();
@@ -35,10 +34,17 @@ class App extends Component {
       });
     }
   };
-
   handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     const term = event.target.value.trim();
-    this.setState({ searchTerm: term });
+    if (term === '') {
+      this.setState({ searchTerm: '' }, () => {
+        this.fetchData();
+      });
+    } else {
+      this.setState({ searchTerm: term }, () => {
+        localStorage.setItem('searchTerm', term);
+      });
+    }
   };
 
   handleSearch = () => {
