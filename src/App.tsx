@@ -2,6 +2,7 @@ import './App.css';
 import Search from './components/Search/Search';
 import SearchResults from './components/SearchResults/SearchResults';
 import { Component, ChangeEvent } from 'react';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 
 class App extends Component {
   state = {
@@ -63,30 +64,32 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        {this.state.hasError ? (
-          <p>{this.state.errorMessage}</p>
-        ) : (
-          <>
-            <Search
-              handleSearch={this.handleSearch}
-              searchTerm={this.state.searchTerm}
-              handleSearchChange={this.handleSearchChange}
-            />
-            <button
-              type="button"
-              onClick={this.throwError}
-              className="error-button"
-            >
-              Error
-            </button>
-            <SearchResults
-              searchResults={this.state.searchResults}
-              isLoading={this.state.isLoading}
-            />
-          </>
-        )}
-      </div>
+      <ErrorBoundary>
+        <div className="App">
+          {this.state.hasError ? (
+            <p>{this.state.errorMessage}</p>
+          ) : (
+            <>
+              <Search
+                handleSearch={this.handleSearch}
+                searchTerm={this.state.searchTerm}
+                handleSearchChange={this.handleSearchChange}
+              />
+              <button
+                type="button"
+                onClick={this.throwError}
+                className="error-button"
+              >
+                Error
+              </button>
+              <SearchResults
+                searchResults={this.state.searchResults}
+                isLoading={this.state.isLoading}
+              />
+            </>
+          )}
+        </div>
+      </ErrorBoundary>
     );
   }
 }

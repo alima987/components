@@ -529,29 +529,29 @@
           /******/ switch (currentStatus) {
             /******/ case 'idle':
               /******/ currentUpdateApplyHandlers = [];
-              /******/ Object.keys(__webpack_require__.hmrI).forEach(function (
-                key
-              ) {
-                /******/ __webpack_require__.hmrI[key](
-                  /******/ moduleId,
-                  /******/ currentUpdateApplyHandlers
+              /******/ Object.keys(__webpack_require__.hmrI).forEach(
+                function (key) {
+                  /******/ __webpack_require__.hmrI[key](
+                    /******/ moduleId,
+                    /******/ currentUpdateApplyHandlers
+                    /******/
+                  );
                   /******/
-                );
-                /******/
-              });
+                }
+              );
               /******/ setStatus('ready');
               /******/ break;
             /******/ case 'ready':
-              /******/ Object.keys(__webpack_require__.hmrI).forEach(function (
-                key
-              ) {
-                /******/ __webpack_require__.hmrI[key](
-                  /******/ moduleId,
-                  /******/ currentUpdateApplyHandlers
+              /******/ Object.keys(__webpack_require__.hmrI).forEach(
+                function (key) {
+                  /******/ __webpack_require__.hmrI[key](
+                    /******/ moduleId,
+                    /******/ currentUpdateApplyHandlers
+                    /******/
+                  );
                   /******/
-                );
-                /******/
-              });
+                }
+              );
               /******/ break;
             /******/ case 'prepare':
             /******/ case 'check':
