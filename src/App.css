@@ -24,8 +24,12 @@ button {
 
 .error-button {
   margin-bottom: 10px;
+  width: 50px;
+  height: 22px;
 }
-
+.error-button:hover {
+  background-color:rgb(202, 202, 184);
+}
 .result {
   border: 1px solid;
   border-radius: 10px;
