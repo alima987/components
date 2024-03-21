@@ -3,8 +3,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import './App.css';
 import Search from './components/Search/Search';
 import SearchResults from './components/SearchResults/SearchResults';
-import Pagination from './components/pagination';
+import Pagination from './components/Pagination/Pagination';
 import { Characters } from './components/SearchResults/SearchResults';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 
 const App = () => {
   const navigate = useNavigate();
@@ -31,13 +32,13 @@ const App = () => {
 
         let url = 'https://rickandmortyapi.com/api/character';
         if (searchTerm) {
-          url += `?name=${searchTerm.trim()}`;
+          url += `/?name=${searchTerm}`;
         }
         const response = await fetch(url);
         await response.json();
 
         const allResults = [];
-        for (let i = 1; i <= 4; i++) {
+        for (let i = 1; i <= 42; i++) {
           const pageUrl = `https://rickandmortyapi.com/api/character/?page=${i}`;
           const pageResponse = await fetch(pageUrl);
           const pageData = await pageResponse.json();
@@ -61,14 +62,14 @@ const App = () => {
     [searchTerm, currentPage]
   );
   const fetchData = useCallback(() => {
-    fetchDataWithPageSize(5);
+    fetchDataWithPageSize(20);
   }, [fetchDataWithPageSize]);
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     const term = event.target.value.trim();
     if (term === '') {
-      setSearchTerm('');
       fetchData();
+      setSearchTerm('');
     } else {
       setSearchTerm(term);
       localStorage.setItem('searchTerm', term);
@@ -77,7 +78,7 @@ const App = () => {
 
   const handleSearch = () => {
     setIsLoading(true);
-    fetchData();
+    fetchDataWithPageSize(20);
   };
 
   const handlePageChange = (pageNumber: number) => {
@@ -100,29 +101,34 @@ const App = () => {
   }, [searchTerm, fetchData, currentPage]);
 
   return (
-    <div className="App">
-      {hasError ? (
-        <p>{errorMessage}</p>
-      ) : (
-        <>
-          <Search
-            handleSearch={handleSearch}
-            searchTerm={searchTerm}
-            handleSearchChange={handleSearchChange}
-          />
-          <button type="button" onClick={throwError} className="error-button">
-            Error
-          </button>
-          <SearchResults searchResults={displayResults} isLoading={isLoading} />
-          <Pagination
-            currentPage={currentPage}
-            totalCount={searchResults.length}
-            onPageChange={handlePageChange}
-            onPageSizeChange={handlePageSizeChange}
-          />
-        </>
-      )}
-    </div>
+    <ErrorBoundary>
+      <div className="App">
+        {hasError ? (
+          <p>{errorMessage}</p>
+        ) : (
+          <>
+            <Search
+              handleSearch={handleSearch}
+              searchTerm={searchTerm}
+              handleSearchChange={handleSearchChange}
+            />
+            <button type="button" onClick={throwError} className="error-button">
+              Error
+            </button>
+            <SearchResults
+              searchResults={displayResults}
+              isLoading={isLoading}
+            />
+            <Pagination
+              currentPage={currentPage}
+              totalCount={searchResults.length}
+              onPageChange={handlePageChange}
+              onPageSizeChange={handlePageSizeChange}
+            />
+          </>
+        )}
+      </div>
+    </ErrorBoundary>
   );
 };
 

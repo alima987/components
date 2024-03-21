@@ -65,11 +65,14 @@ const SearchResults: React.FC<SearchResultsProps> = (props) => {
             <span className="close" onClick={() => setSelectedItem(null)}>
               &times;
             </span>
+            <div>
+              <img src={selectedItem.image} className="details_img" />
+            </div>
             <h2>{selectedItem.name}</h2>
             <p>Species: {selectedItem.species}</p>
             <p>Gender: {selectedItem.gender}</p>
             <p>Last known location: {selectedItem.location.name}</p>
-            <Outlet></Outlet>
+            <Outlet />
           </div>
         </div>
       )}
