@@ -1,27 +1,33 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
+import './SearchResults.scss';
 
-export interface Starship {
+export interface Characters {
+  id: number;
   name: string;
-  model: string;
-  manufacturer: string;
+  species: string;
+  gender: string;
+  location: {
+    name: string;
+  };
+  image: string;
 }
 
 interface SearchResultsProps {
-  searchResults: Starship[];
+  searchResults: Characters[];
   isLoading: boolean;
 }
 
 const SearchResults: React.FC<SearchResultsProps> = (props) => {
   const navigate = useNavigate();
-  const [selectedItem, setSelectedItem] = useState<Starship | null>(null);
+  const [selectedItem, setSelectedItem] = useState<Characters | null>(null);
 
   const renderLoader = () => {
     return <div className="loader">Loading...</div>;
   };
 
   const renderResults = () => {
-    const handleItemClick = (item: Starship) => {
+    const handleItemClick = (item: Characters) => {
       setSelectedItem(item);
       navigate(`/?frontpage=2&details=${item.name}`);
     };
@@ -31,13 +37,19 @@ const SearchResults: React.FC<SearchResultsProps> = (props) => {
         {props.isLoading ? renderLoader() : null}
         {props.searchResults.map((result) => (
           <div
-            key={result.name}
+            key={result.id}
+            className="card"
             onClick={() => handleItemClick(result)}
-            className="result-item"
           >
-            <h2>{result.name}</h2>
-            <p>Model: {result.model}</p>
-            <p>Manufacturer: {result.manufacturer}</p>
+            <div className="img_card">
+              <img src={result.image} className="card_img" />
+            </div>
+            <div className="card_item">
+              <h2>{result.name}</h2>
+              <p>Species: {result.species}</p>
+              <p>Gender: {result.gender}</p>
+              <p>Last known location: {result.location.name}</p>
+            </div>
           </div>
         ))}
       </div>
@@ -54,8 +66,9 @@ const SearchResults: React.FC<SearchResultsProps> = (props) => {
               &times;
             </span>
             <h2>{selectedItem.name}</h2>
-            <p>Model: {selectedItem.model}</p>
-            <p>Manufacturer: {selectedItem.manufacturer}</p>
+            <p>Species: {selectedItem.species}</p>
+            <p>Gender: {selectedItem.gender}</p>
+            <p>Last known location: {selectedItem.location.name}</p>
             <Outlet></Outlet>
           </div>
         </div>

@@ -1,3 +1,11 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background-color: #dae6ec;
+}
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -16,41 +24,20 @@ button {
 
 .error-button {
   margin-bottom: 10px;
+  width: 50px;
+  height: 22px;
 }
-
+.error-button:hover {
+  background-color: rgb(202, 202, 184);
+}
 .result {
   border: 1px solid;
   border-radius: 10px;
   margin-bottom: 15px;
 }
-
-.pagination {
-  list-style: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-}
-
-.pagination li {
-  margin: 0 5px;
-}
-
-.pagination button {
-  padding: 5px 10px;
-  background-color: #4caf50;
+h2 {
   color: white;
-  border: none;
-  cursor: pointer;
 }
-
-.pagination button.active {
-  background-color: #333;
-}
-
-ul {
-  display: flex;
-}
-::marker {
-  color: transparent;
+p {
+  color: white;
 }

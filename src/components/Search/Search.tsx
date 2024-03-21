@@ -1,4 +1,5 @@
 import { ChangeEvent } from 'react';
+import './Search.scss';
 
 interface SearchProps {
   handleSearch: () => void;
@@ -10,13 +11,14 @@ const Search = (props: SearchProps) => {
   return (
     <div className="search">
       <input
+        className="search_int"
         type="text"
         value={props.searchTerm}
         onChange={props.handleSearchChange}
-        placeholder="Starships"
+        placeholder="Characters"
       />
-      <button type="button" onClick={props.handleSearch}>
-        Search ships!
+      <button className="search_btn" type="button" onClick={props.handleSearch}>
+        Search
       </button>
     </div>
   );

@@ -1,15 +1,10 @@
 import { useState, useEffect, useCallback, ChangeEvent } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './App.css';
-import Search from './components/Search';
-import SearchResults from './components/SearchResults';
+import Search from './components/Search/Search';
+import SearchResults from './components/SearchResults/SearchResults';
 import Pagination from './components/pagination';
-
-interface Starship {
-  name: string;
-  model: string;
-  manufacturer: string;
-}
+import { Characters } from './components/SearchResults/SearchResults';
 
 const App = () => {
   const navigate = useNavigate();
@@ -26,24 +21,24 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(page);
-  const [searchResults, setSearchResults] = useState<Starship[]>([]);
-  const [displayResults, setDisplayResults] = useState<Starship[]>([]);
+  const [searchResults, setSearchResults] = useState<Characters[]>([]);
+  const [displayResults, setDisplayResults] = useState<Characters[]>([]);
 
   const fetchDataWithPageSize = useCallback(
     async (pageSize: number) => {
       try {
         setIsLoading(true);
 
-        let url = 'https://swapi.dev/api/starships/';
+        let url = 'https://rickandmortyapi.com/api/character';
         if (searchTerm) {
-          url += `?search=${searchTerm.trim()}`;
+          url += `?name=${searchTerm.trim()}`;
         }
         const response = await fetch(url);
         await response.json();
 
         const allResults = [];
         for (let i = 1; i <= 4; i++) {
-          const pageUrl = `https://swapi.dev/api/starships/?page=${i}`;
+          const pageUrl = `https://rickandmortyapi.com/api/character/?page=${i}`;
           const pageResponse = await fetch(pageUrl);
           const pageData = await pageResponse.json();
           allResults.push(...pageData.results);
@@ -71,7 +66,13 @@ const App = () => {
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     const term = event.target.value.trim();
-    setSearchTerm(term);
+    if (term === '') {
+      setSearchTerm('');
+      fetchData();
+    } else {
+      setSearchTerm(term);
+      localStorage.setItem('searchTerm', term);
+    }
   };
 
   const handleSearch = () => {
@@ -81,7 +82,7 @@ const App = () => {
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
-    navigate(`/search?page=${pageNumber}`);
+    navigate(`/?page=${pageNumber}`);
   };
 
   const handlePageSizeChange = (pageSize: number) => {
