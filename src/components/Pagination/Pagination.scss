@@ -1,0 +1,41 @@
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  grid-gap: 30px;
+  .page-size {
+    display: flex;
+    width: 140px;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    margin: 10px;
+    border: 1px solid black;
+    flex-wrap: nowrap;
+    border-radius: 8px;
+    background-color: #ecd20a;
+    grid-gap: 10px;
+  }
+  .pag-nums {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    list-style-type: none;
+    grid-gap: 5px;
+  }
+  .pag-items {
+    width: 40px;
+    height: 32px;
+    background-color: #f9e6ad;
+    border: 2px solid #905f07;
+  }
+  .pag-items:hover {
+    background-color: #ffc107;
+  }
+  .select {
+    background-color: #ecd20a;
+    border: none;
+  }
+}
