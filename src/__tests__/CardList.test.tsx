@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import SearchResults from '../components/CardList';
+import SearchResults from '../components/SearchResults/CardList';
 import { CustomStateProvider } from '../components/Context';
 import { MemoryRouter } from 'react-router-dom';
 

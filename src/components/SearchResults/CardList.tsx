@@ -1,28 +1,35 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { useCustomState } from './Context';
+import { useCustomState } from '../Context';
 import Card from './Card';
+import './SearchResults.scss';
 
-export interface Starship {
+export interface Characters {
+  id: number;
   name: string;
-  model: string;
-  manufacturer: string;
+  species: string;
+  gender: string;
+  location: {
+    name: string;
+  };
+  image: string;
 }
+
 interface SearchResultsProps {
-  searchResults: Starship[];
+  searchResults: Characters[];
   isLoading: boolean;
 }
 
 const SearchResults: React.FC<SearchResultsProps> = (props) => {
   useCustomState();
   const navigate = useNavigate();
-  const [selectedItem, setSelectedItem] = useState<Starship | null>(null);
+  const [selectedItem, setSelectedItem] = useState<Characters | null>(null);
 
   const renderLoader = () => {
     return <div className="loader">Loading...</div>;
   };
 
-  const handleItemClick = (item: Starship) => {
+  const handleItemClick = (item: Characters) => {
     setSelectedItem(item);
     navigate(`/?frontpage=2&details=${item.name}`);
   };
@@ -47,10 +54,14 @@ const SearchResults: React.FC<SearchResultsProps> = (props) => {
             <span className="close" onClick={() => setSelectedItem(null)}>
               &times;
             </span>
+            <div>
+              <img src={selectedItem.image} className="details_img" />
+            </div>
             <h2>{selectedItem.name}</h2>
-            <p>Model: {selectedItem.model}</p>
-            <p>Manufacturer: {selectedItem.manufacturer}</p>
-            <Outlet></Outlet>
+            <p>Species: {selectedItem.species}</p>
+            <p>Gender: {selectedItem.gender}</p>
+            <p>Last known location: {selectedItem.location.name}</p>
+            <Outlet />
           </div>
         </div>
       )}

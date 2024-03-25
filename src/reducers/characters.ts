@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Starship } from '../App';
+import { Characters } from '../components/SearchResults/CardList';
 
-interface StarshipsState {
-  data: Starship[];
+interface CharactersState {
+  data: Characters[];
   isLoading: boolean;
   error: string | null;
   searchTerm: string;
@@ -11,29 +11,29 @@ interface StarshipsState {
   detailsLoading: boolean;
 }
 
-const initialState: StarshipsState = {
+const initialState: CharactersState = {
   data: [],
   isLoading: false,
   error: null,
   searchTerm: '',
-  itemsPerPage: 5,
+  itemsPerPage: 20,
   appLoading: false,
   detailsLoading: false,
 };
 
-export const starshipsSlice = createSlice({
-  name: 'starships',
+export const charactersSlice = createSlice({
+  name: 'characters',
   initialState,
   reducers: {
-    fetchStarshipsStart: (state) => {
+    fetchCharactersStart: (state) => {
       state.isLoading = true;
       state.error = null;
     },
-    fetchStarshipsSuccess: (state, action: PayloadAction<Starship[]>) => {
+    fetchCharactersSuccess: (state, action: PayloadAction<Characters[]>) => {
       state.data = action.payload;
       state.isLoading = false;
     },
-    fetchStarshipsFailure: (state, action: PayloadAction<string>) => {
+    fetchCharactersFailure: (state, action: PayloadAction<string>) => {
       state.error = action.payload;
       state.isLoading = false;
     },
@@ -53,13 +53,13 @@ export const starshipsSlice = createSlice({
 });
 
 export const {
-  fetchStarshipsStart,
-  fetchStarshipsSuccess,
-  fetchStarshipsFailure,
+  fetchCharactersStart,
+  fetchCharactersSuccess,
+  fetchCharactersFailure,
   saveSearchTerm,
   saveItemsPerPage,
   setAppLoading,
   setDetailsLoading,
-} = starshipsSlice.actions;
+} = charactersSlice.actions;
 
-export default starshipsSlice.reducer;
+export default charactersSlice.reducer;

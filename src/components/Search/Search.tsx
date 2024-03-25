@@ -1,9 +1,10 @@
 import React from 'react';
 import { ChangeEvent } from 'react';
-import { useCustomState } from './Context';
+import { useCustomState } from '../Context';
 import { useDispatch, useSelector } from 'react-redux';
-import { saveSearchTerm } from '../reducers/starships';
-import { RootState } from '../reducers/rootReducer';
+import { saveSearchTerm } from '../../reducers/characters';
+import { RootState } from '../../reducers/rootReducer';
+import './Search.scss';
 
 interface SearchProps {
   handleSearch: () => void;
@@ -13,12 +14,13 @@ interface SearchProps {
 
 const Search = (props: SearchProps) => {
   const dispatch = useDispatch();
-  const { searchTerm } = useSelector((state: RootState) => state.starships);
+  const { searchTerm } = useSelector((state: RootState) => state.characters);
   const { setSearchTerm } = useCustomState();
 
   return (
     <div className="search">
       <input
+        className="search_int"
         type="text"
         value={searchTerm}
         onChange={(e) => {
@@ -27,10 +29,10 @@ const Search = (props: SearchProps) => {
           dispatch(saveSearchTerm(term));
           props.handleSearchChange(e);
         }}
-        placeholder="Starships"
+        placeholder="Characters"
       />
-      <button type="button" onClick={props.handleSearch}>
-        Search ships!
+      <button className="search_btn" type="button" onClick={props.handleSearch}>
+        Search
       </button>
     </div>
   );

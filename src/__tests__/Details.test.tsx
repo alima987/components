@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
-import Details from '../components/Details';
+import Details from '../components/Details/Details';
 import { act } from 'react-dom/test-utils';
 import { Provider } from 'react-redux';
 import store from '../query/store';

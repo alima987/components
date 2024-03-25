@@ -1,16 +1,16 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Starship } from '../App';
+import { Characters } from '../components/SearchResults/CardList';
 
 export const api = createApi({
   reducerPath: 'api',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://swapi.dev/api/' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://rickandmortyapi.com/api/' }),
   endpoints: (builder) => ({
     getStarships: builder.query<
-      Starship[],
+      Characters[],
       { searchTerm?: string; page?: number }
     >({
       query: ({ searchTerm = '', page = 1 }) =>
-        `starships/?search=${searchTerm}&page=${page}`,
+        `character/?name=${searchTerm}&page=${page}`,
     }),
   }),
 });

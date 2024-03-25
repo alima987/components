@@ -1,11 +1,11 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
-import { Starship } from './CardList';
+import { Characters } from './SearchResults/CardList';
 
 interface CustomStateContextProps {
   searchTerm: string;
   setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
-  searchResults: Starship[];
-  setSearchResults: React.Dispatch<React.SetStateAction<Starship[]>>;
+  searchResults: Characters[];
+  setSearchResults: React.Dispatch<React.SetStateAction<Characters[]>>;
 }
 
 const CustomStateContext = createContext<CustomStateContextProps | undefined>(
@@ -22,7 +22,7 @@ export const useCustomState = () => {
 
 export const CustomStateProvider = ({ children }: { children: ReactNode }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState<Starship[]>([]);
+  const [searchResults, setSearchResults] = useState<Characters[]>([]);
 
   return (
     <CustomStateContext.Provider

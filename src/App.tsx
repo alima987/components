@@ -2,19 +2,14 @@ import React from 'react';
 import { useState, useEffect, useCallback, ChangeEvent } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './App.css';
-import Search from './components/Search';
-import SearchResults from './components/CardList';
-import Pagination from './components/Pagination';
+import Search from './components/Search/Search';
+import SearchResults from './components/SearchResults/CardList';
+import Pagination from './components/Pagination/Pagination';
 import { useDispatch, useSelector } from 'react-redux';
-import { saveSearchTerm, saveItemsPerPage } from './reducers/starships';
+import { saveSearchTerm, saveItemsPerPage } from './reducers/characters';
 import { RootState } from './reducers/rootReducer';
-import { setAppLoading } from './reducers/starships';
-
-export interface Starship {
-  name: string;
-  model: string;
-  manufacturer: string;
-}
+import { setAppLoading } from './reducers/characters';
+import { Characters } from './components/SearchResults/CardList';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -24,14 +19,14 @@ const App = () => {
   const queryParams = new URLSearchParams(location.search);
   const page = parseInt(queryParams.get('page') || '1');
 
-  const { searchTerm } = useSelector((state: RootState) => state.starships);
+  const { searchTerm } = useSelector((state: RootState) => state.characters);
 
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(page);
-  const [searchResults, setSearchResults] = useState<Starship[]>([]);
-  const [displayResults, setDisplayResults] = useState<Starship[]>([]);
+  const [searchResults, setSearchResults] = useState<Characters[]>([]);
+  const [displayResults, setDisplayResults] = useState<Characters[]>([]);
 
   const fetchDataWithPageSize = useCallback(
     async (pageSize: number) => {
@@ -39,16 +34,16 @@ const App = () => {
         dispatch(setAppLoading(true));
         setIsLoading(true);
 
-        let url = 'https://swapi.dev/api/starships/';
+        let url = 'https://rickandmortyapi.com/api/character';
         if (searchTerm) {
-          url += `?search=${searchTerm.trim()}`;
+          url += `/?name=${searchTerm.trim()}`;
         }
         const response = await fetch(url);
         await response.json();
 
         const allResults = [];
-        for (let i = 1; i <= 4; i++) {
-          const pageUrl = `https://swapi.dev/api/starships/?page=${i}`;
+        for (let i = 1; i <= 42; i++) {
+          const pageUrl = `https://rickandmortyapi.com/api/character/?page=${i}`;
           const pageResponse = await fetch(pageUrl);
           const pageData = await pageResponse.json();
           allResults.push(...pageData.results);
@@ -74,7 +69,7 @@ const App = () => {
     [searchTerm, currentPage, dispatch]
   );
   const fetchData = useCallback(() => {
-    fetchDataWithPageSize(5);
+    fetchDataWithPageSize(20);
   }, [fetchDataWithPageSize]);
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +84,7 @@ const App = () => {
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
-    navigate(`/search?page=${pageNumber}`);
+    navigate(`/?page=${pageNumber}`);
   };
 
   const handlePageSizeChange = (pageSize: number) => {

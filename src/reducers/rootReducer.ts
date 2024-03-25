@@ -1,8 +1,8 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import starshipsReducer from './starships';
+import charactersReducer from './characters';
 
 const rootReducer = combineReducers({
-  starships: starshipsReducer,
+  characters: charactersReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -1,21 +1,16 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import './Details.css';
+import './Details.scss';
 import { useDispatch } from 'react-redux';
-import { setDetailsLoading } from '../reducers/starships';
-
-interface StarshipDetails {
-  name: string;
-  model: string;
-  manufacturer: string;
-}
+import { setDetailsLoading } from '../../reducers/characters';
+import { Characters } from '../SearchResults/CardList';
 
 const Details = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-  const [detailsData, setDetailsData] = useState<StarshipDetails | null>(null);
+  const [detailsData, setDetailsData] = useState<Characters | null>(null);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -28,11 +23,11 @@ const Details = () => {
         try {
           dispatch(setDetailsLoading(true));
           const response = await fetch(
-            `https://swapi.dev/api/starships/?page=${page}`
+            `https://rickandmortyapi.com/api/character/?page=${page}`
           );
           const data = await response.json();
           dispatch(setDetailsLoading(false));
-          return data.results[0] as StarshipDetails;
+          return data.results[0] as Characters;
         } catch (error) {
           dispatch(setDetailsLoading(false));
           console.error('Error fetching details:', error);
@@ -50,7 +45,7 @@ const Details = () => {
   }, [location, dispatch]);
 
   const handleCloseModal = () => {
-    navigate('/search');
+    navigate('/name');
   };
 
   return (
@@ -61,9 +56,13 @@ const Details = () => {
             <span className="close" onClick={handleCloseModal}>
               &times;
             </span>
+            <div>
+              <img src={detailsData.image} className="details_img" />
+            </div>
             <h2>{detailsData.name}</h2>
-            <p>Model: {detailsData.model}</p>
-            <p>Manufacturer: {detailsData.manufacturer}</p>
+            <p>Species: {detailsData.species}</p>
+            <p>Gender: {detailsData.gender}</p>
+            <p>Last known location: {detailsData.location.name}</p>
           </>
         ) : (
           <p>Loading details...</p>

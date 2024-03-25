@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import Search from '../components/Search';
+import Search from '../components/Search/Search';
 import { useCustomState } from '../components/Context';
 import { useDispatch } from 'react-redux';
 import { Provider } from 'react-redux';
